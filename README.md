@@ -89,6 +89,7 @@ Os testes foram realizados considerando diferentes tipos de entrada para avaliar
 
 - Linguagem C
 - Linguagem Python
+- Matplotlib
 - Streamlit
 - Pandas
 - NumPy
