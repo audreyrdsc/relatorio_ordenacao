@@ -107,7 +107,7 @@ Os testes foram realizados considerando diferentes tipos de entrada para avaliar
 python -m venv .venv             # Criação do ambiente virtual
 .\.venv\Scripts\Activate.ps1     # Ativação do ambiente virtual
 pip install -r requirements.txt  # Instalação das bibliotecas
-streamlit run app.py             # Comando para execução da aplicação
+streamlit run Home.py             # Comando para execução da aplicação
 http://localhost:8501            # Exibição local
 ```
 
@@ -115,6 +115,8 @@ http://localhost:8501            # Exibição local
 ```bash
 https://github.com/audreyrdsc/relatorio_ordenacao.git
 ```
-
-
+### 8.3 Execução direta na Web
+```bash
+https://relatorio-ordenacao.streamlit.app/
+```
 

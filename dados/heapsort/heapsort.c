@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-Preparar versão definitiva para MAX_N = 1.000.000
-
-#define MAX_N 100 //1000000
+#define MAX_N 1000000
 #define MIN_VAL 1
-#define MAX_VAL 100 //1000000
+#define MAX_VAL 1000000
 
 // =====================================================
 // HeapSort
@@ -93,9 +91,19 @@ int main() {
 
         for (int n = 1; n <= MAX_N; n++) {
 
-            if (tipo == 0) gerar_aleatorio(v, n);
-            if (tipo == 1) gerar_crescente(v, n);
-            if (tipo == 2) gerar_decrescente(v, n);
+            if (tipo == 0) {
+                printf("Gerando vetor aleatorio de tamanho %d...\n", n);
+                gerar_aleatorio(v, n);
+            } 
+                
+            if (tipo == 1) {
+                printf("Gerando vetor crescente de tamanho %d...\n", n);
+                gerar_crescente(v, n);
+            }
+            if (tipo == 2) {
+                printf("Gerando vetor decrescente de tamanho %d...\n", n);
+                gerar_decrescente(v, n);
+            }  
 
             clock_t inicio = clock();
             sort(v, n);

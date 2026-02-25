@@ -55,9 +55,19 @@ int main() {
 
         for (int n = 1; n <= MAX_N; n++) {
 
-            if (tipo == 0) gerar_aleatorio(v, n);
-            if (tipo == 1) gerar_crescente(v, n);
-            if (tipo == 2) gerar_decrescente(v, n);
+            if (tipo == 0) {
+                printf("Gerando vetor aleatorio de tamanho %d...\n", n);
+                gerar_aleatorio(v, n);
+            } 
+                
+            if (tipo == 1) {
+                printf("Gerando vetor crescente de tamanho %d...\n", n);
+                gerar_crescente(v, n);
+            }
+            if (tipo == 2) {
+                printf("Gerando vetor decrescente de tamanho %d...\n", n);
+                gerar_decrescente(v, n);
+            }  
 
             clock_t inicio = clock();
             sort(v, n);
