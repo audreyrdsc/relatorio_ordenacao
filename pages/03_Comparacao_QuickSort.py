@@ -3,23 +3,24 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import make_interp_spline
+import plotly.graph_objects as go
 
 # ==========================================================
 # CONFIGURAÇÃO
 # ==========================================================
 
 st.set_page_config(
-    page_title="QuickSort - Estudo Comparativo"
+    page_title="Estudo Comparativo - QuickSort"
 ) 
 
 plt.style.use("seaborn-v0_8-darkgrid")
 
 # Título principal
-st.markdown("<h2 style='text-align: center;'>📊 Estudo Comparativo do QuickSort</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>📊 Estudo Comparativo de Algoritmos de Ordenação</h2>", unsafe_allow_html=True)
 
 # Subtítulo
 st.markdown(
-    "<h4 style='text-align: center;'>🧾 (Pivô Central vs Pivô Aleatório)</h4>",
+    "<h4 style='text-align: center;'>🧾 QuickSort (Pivô Central vs Pivô Aleatório)</h4>",
     unsafe_allow_html=True
 )
 
@@ -32,7 +33,7 @@ Este relatório apresenta a comparação experimental entre:
 - QuickSort com pivô central
 - QuickSort com pivô aleatório
 
-Para três tipos de entrada:
+Utilizando uma sequência aleatória de números inteiros entre `1` e `1.000.000`, para três tipos de entrada:
 - Aleatória
 - Crescente
 - Decrescente
@@ -173,71 +174,90 @@ with col3:
     st.markdown("""<div style="text-align: center;"> <h5> Decrescente </h5></div>""", unsafe_allow_html=True)
     grafico_comparativo("decrescente")
     
-# ==========================================================
-# 4 - ANÁLISE ASSINTÓTICA (ALEATÓRIO COMO REFERÊNCIA)
-# ==========================================================
-st.header("4. Análise Assintótica - QuickSort")
+# ==============================================================
+# 4 - ANÁLISE ASSINTÓTICA INTERATIVO (ALEATÓRIO COMO REFERÊNCIA)
+# ==============================================================
 
-fig, ax = plt.subplots(figsize=(10,6))
+st.header("4. Análise Assintótica - Interativo")
+
+fig = go.Figure()
 
 # =========================
-# QUICKSort - Pivô Central
+# QuickSort - Pivô Central
 # =========================
 for tipo in ["aleatorio", "crescente", "decrescente"]:
-    
     df = meio[tipo]
-    x = df["n"].values
-    y = df["tempo"].values
-    
-    x_suave, y_suave = suavizar(x, y)
-    
-    ax.plot(x_suave, y_suave,
-            linewidth=0.5,
-            label=f"Central - {tipo}")
+    x_suave, y_suave = suavizar(df["n"].values, df["tempo"].values)
+    fig.add_trace(go.Scatter(
+        x=x_suave,
+        y=y_suave,
+        mode='lines',
+        name=f"Central - {tipo}",
+        line=dict(width=0.5),
+        hovertemplate='n: %{x}<br>Tempo: %{y:.2f} ms'
+    ))
 
 # =========================
 # QuickSort - Pivô Aleatório
 # =========================
 for tipo in ["aleatorio", "crescente", "decrescente"]:
-    
     df = aleatorio[tipo]
-    x = df["n"].values
-    y = df["tempo"].values
-    
-    x_suave, y_suave = suavizar(x, y)
-    
-    ax.plot(x_suave, y_suave,
-            #linestyle="--",
-            linewidth=0.5,
-            label=f"Aleatório - {tipo}")
+    x_suave, y_suave = suavizar(df["n"].values, df["tempo"].values)
+    fig.add_trace(go.Scatter(
+        x=x_suave,
+        y=y_suave,
+        mode='lines',
+        name=f"Aleatório - {tipo}",
+        line=dict(width=0.5),
+        hovertemplate='n: %{x}<br>Tempo: %{y:.2f} ms'
+    ))
 
 # =========================
 # Curvas Assintóticas Teóricas
 # =========================
-
-# Usando o maior conjunto como base
 df_ref = meio["aleatorio"]
-x_ref = df_ref["n"].values
-x_suave, _ = suavizar(x_ref, df_ref["tempo"].values)
+x_suave, _ = suavizar(df_ref["n"].values, df_ref["tempo"].values)
 
 # O(n log n)
 curva_nlogn = x_suave * np.log2(x_suave)
 curva_nlogn = (curva_nlogn / np.max(curva_nlogn)) * np.max(df_ref["tempo"].values)
-ax.plot(x_suave, curva_nlogn, linestyle="--", label="O(n log n)")
+fig.add_trace(go.Scatter(
+    x=x_suave, y=curva_nlogn,
+    mode='lines',
+    name="O(n log n)",
+    line=dict(dash='dash', width=0.5)
+))
 
 # O(n²)
 curva_n2 = x_suave**2
 curva_n2 = (curva_n2 / np.max(curva_n2)) * np.max(df_ref["tempo"].values)
-ax.plot(x_suave, curva_n2, linestyle="--", label="O(n²)")
+fig.add_trace(go.Scatter(
+    x=x_suave, y=curva_n2,
+    mode='lines',
+    name="O(n²)",
+    line=dict(dash='dash', width=0.5)
+))
 
 # =========================
+# Layout
+# =========================
+fig.update_layout(
+    title=dict(
+        text="Comparação Assintótica - QuickSort",
+        x=0.5,  # centralizar título
+        xanchor='center'
+    ),
+    xaxis_title="Tamanho do vetor (n)",
+    yaxis_title="Tempo de execução (ms)",
+    legend_title="Algoritmos",
+    hovermode="x unified",
+    template="plotly_white"
+)
 
-ax.set_xlabel("Tamanho do vetor (n)")
-ax.set_ylabel("Tempo de execução (ms)")
-ax.set_title("Comparação Assintótica - QuickSort")
-ax.legend()
-
-st.pyplot(fig)
+# =========================
+# Mostrar no Streamlit
+# =========================
+st.plotly_chart(fig, use_container_width=True)
 
 # ==========================================================
 # 5 - ANÁLISE FORMAL

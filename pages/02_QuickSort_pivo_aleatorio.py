@@ -28,7 +28,7 @@ st.markdown("""
 ### 🎯 Objetivo
 
 Este relatório apresenta a análise experimental do algoritmo QuickSort,
-com escolha de pivô aleatória, utilizando três tipos de entrada:
+com escolha de pivô aleatória, utilizando uma sequência aleatória de números inteiros entre `1` e `1.000.000`, para três tipos de entrada:
 
 - Sequência Aleatória
 - Sequência Crescente
@@ -185,7 +185,7 @@ ax.plot(x_d, y_d, label="Decrescente", linewidth=0.75)
 
 ax.set_xlabel("Tamanho do vetor (n)")
 ax.set_ylabel("Tempo de execução (ms)")
-ax.set_title("QuickSort (Pivô Aleatório) - Comparação dos Tipos de Entrada")
+ax.set_title("Comparação do Tempo de Execução do QuickSort", fontsize=14)
 ax.legend()
 
 st.pyplot(fig)
@@ -251,7 +251,7 @@ ax.plot(x_suave, curva_n2, linestyle="--", linewidth=1, label="O(n²)")
 
 ax.set_xlabel("Tamanho do vetor (n)")
 ax.set_ylabel("Tempo de execução (ms)")
-ax.set_title("Análise Assintótica do QuickSort")
+ax.set_title("Análise Assintótica do QuickSort", fontsize=14)
 ax.legend()
 
 st.pyplot(fig)

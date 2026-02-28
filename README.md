@@ -117,6 +117,6 @@ https://github.com/audreyrdsc/relatorio_ordenacao.git
 ```
 ### 8.3 Execução direta na Web
 ```bash
-https://relatorio-ordenacao.streamlit.app/
+https://relatorio-unifap.streamlit.app/
 ```
 
