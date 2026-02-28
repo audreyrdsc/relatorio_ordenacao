@@ -74,17 +74,17 @@ int main() {
         return 1;
     }
 
-    printf("Total de CEPs: %d\n", total);
+    printf("Lidos %d CEPs para ordenacao.\n", total);
 
-    FILE *saida = fopen("ceps_quicksort_meio.txt", "w");
+    FILE *out = fopen("ceps_quicksort_meio.txt", "w");
 
-    if (!saida) {
+    if (!out) {
         printf("Erro ao criar arquivo de saída\n");
         system("pause");
         return 1;
     }
 
-    fprintf(saida, "n tempo_ms\n");
+    fprintf(out, "n tempo_ms\n");
 
     // ===================================================
     // Loop incremental para todo n
@@ -102,14 +102,14 @@ int main() {
         double tempo_ms =
             1000.0 * (double)(fim - inicio) / CLOCKS_PER_SEC;
 
-        fprintf(saida, "%d %.6f\n", n, tempo_ms);
-        fflush(saida);
+        fprintf(out, "%d %.6f\n", n, tempo_ms);
+        fflush(out);
 
         printf("Processando %d/%d\r", n, total);
         fflush(stdout);
     }
 
-    fclose(saida);
+    fclose(out);
 
     printf("\nExperimento QuickSort (pivô central) concluído.\n");
     system("pause");

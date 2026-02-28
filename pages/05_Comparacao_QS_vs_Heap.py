@@ -16,7 +16,7 @@ st.set_page_config(
 plt.style.use("seaborn-v0_8-darkgrid")
 
 st.markdown("<h2 style='text-align: center;'>📊 Estudo Comparativo de Algoritmos de Ordenação</h2>", unsafe_allow_html=True)
-st.markdown("<h4 style='text-align: center;'>🧾 QuickSort (Pivô Central e Aleatório) vs HeapSort</h4>", unsafe_allow_html=True)
+st.markdown("<h4 style='text-align: center;'>QuickSort (Pivô Central e Aleatório) 🆚 HeapSort</h4>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
 st.markdown("""

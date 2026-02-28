@@ -36,7 +36,7 @@ htmlcov/
 .tox/
 .nox/
 .cache/
-pages/trash/
+trash/
 
 # ==========================================================
 # JUPYTER

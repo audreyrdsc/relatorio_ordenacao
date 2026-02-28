@@ -20,7 +20,7 @@ st.markdown("<h2 style='text-align: center;'>📊 Estudo Comparativo de Algoritm
 
 # Subtítulo
 st.markdown(
-    "<h4 style='text-align: center;'>🧾 QuickSort (Pivô Central vs Pivô Aleatório)</h4>",
+    "<h4 style='text-align: center;'>QuickSort (Pivô Central 🆚 Pivô Aleatório)</h4>",
     unsafe_allow_html=True
 )
 

@@ -18,7 +18,7 @@ plt.style.use("seaborn-v0_8-darkgrid")
 st.markdown("<h2 style='text-align: center;'>📊 Estudo Comparativo de Algoritmos de Ordenação</h2>", unsafe_allow_html=True)
 
 st.markdown(
-    "<h4 style='text-align: center;'>🧾 Counting Sort vs Radix Sort</h4>",
+    "<h4 style='text-align: center;'>Counting Sort 🆚 Radix Sort</h4>",
     unsafe_allow_html=True
 )
 
