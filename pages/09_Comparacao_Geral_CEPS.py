@@ -221,9 +221,16 @@ for nome, df in algoritmos.items():
         )
     ))
 
-# Curva O(n) proporcional
+# ----------------------------------------------------------
+# Curvas teóricas assintóticas
+# ----------------------------------------------------------
+
+# Base de referência para normalização
 x_base, y_base = suavizar(counting["n"].values, counting["tempo_ms"].values)
-curva_n = (x_base / np.max(x_base)) * np.max(y_base)
+tempo_max = np.max(y_base)
+
+# 🔸 Curva O(n)
+curva_n = (x_base / np.max(x_base)) * tempo_max
 
 fig.add_trace(go.Scatter(
     x=x_base,
@@ -231,6 +238,30 @@ fig.add_trace(go.Scatter(
     mode='lines',
     name="O(n)",
     line=dict(width=1.5, dash='dash', color='orange')
+))
+
+# 🔸 Curva O(n log n)
+curva_nlogn = x_base * np.log2(x_base)
+curva_nlogn = (curva_nlogn / np.max(curva_nlogn)) * tempo_max
+
+fig.add_trace(go.Scatter(
+    x=x_base,
+    y=curva_nlogn,
+    mode='lines',
+    name="O(n log n)",
+    line=dict(width=1.5, dash='dash', color="lightgreen")
+))
+
+# 🔸 Curva O(n²)
+curva_n2 = x_base**2
+curva_n2 = (curva_n2 / np.max(curva_n2)) * tempo_max
+
+fig.add_trace(go.Scatter(
+    x=x_base,
+    y=curva_n2,
+    mode='lines',
+    name="O(n²)",
+    line=dict(width=1.5, dash='dash', color="lightcoral")
 ))
 
 fig.update_layout(
@@ -266,11 +297,11 @@ Já QuickSort e HeapSort exibem crescimento típico de O(n log n).
 <h3>Diferenças Estruturais</h3>
 
 <ul>
-<li><strong>Counting Sort:</strong> desempenho depende do intervalo (k). Pode consumir mais memória.</li>
-<li><strong>Radix Sort:</strong> depende do número fixo de dígitos (d). Crescimento estável.</li>
-<li><strong>QuickSort (Central):</strong> pode sofrer degradação caso o pivô gere partições desbalanceadas.</li>
-<li><strong>QuickSort (Aleatório):</strong> reduz probabilidade de pior caso, mantendo comportamento médio O(n log n).</li>
-<li><strong>HeapSort:</strong> desempenho garantido O(n log n), porém com constante maior que QuickSort.</li>
+    <li><strong>Counting Sort:</strong> desempenho depende do intervalo (k). Pode consumir mais memória.</li>
+    <li><strong>Radix Sort:</strong> depende do número fixo de dígitos (d). Crescimento estável.</li>
+    <li><strong>QuickSort (Central):</strong> pode sofrer degradação caso o pivô gere partições desbalanceadas.</li>
+    <li><strong>QuickSort (Aleatório):</strong> reduz probabilidade de pior caso, mantendo comportamento médio O(n log n).</li>
+    <li><strong>HeapSort:</strong> desempenho garantido O(n log n), porém com constante maior que QuickSort.</li>
 </ul>
 
 <h3>Conclusão</h3>
@@ -295,148 +326,3 @@ quando suas premissas estruturais são atendidas.
 
 </div>
 """, unsafe_allow_html=True)
-
-
-# ==========================================================
-# 6 - RANKING DINÂMICO E ESCALAS COMPARATIVAS (INTERATIVO)
-# ==========================================================
-
-st.header("6. Ranking e Escalas Comparativas")
-
-import plotly.graph_objects as go
-
-# ----------------------------------------------------------
-# 1) Cálculo do tempo médio experimental
-# ----------------------------------------------------------
-
-algoritmos = {
-    "Counting Sort": counting,
-    "Radix Sort": radix,
-    "QuickSort (Central)": quick_central,
-    "QuickSort (Aleatório)": quick_random,
-    "HeapSort": heap
-}
-
-tempo_medio = {
-    nome: df["tempo_ms"].mean()
-    for nome, df in algoritmos.items()
-}
-
-# Ranking automático (menor tempo = melhor)
-ranking_tempo = sorted(tempo_medio.items(), key=lambda x: x[1])
-
-# ----------------------------------------------------------
-# 2) Tabela Comparativa Automática
-# ----------------------------------------------------------
-
-complexidade_tempo = {
-    "Counting Sort": "O(n + k)",
-    "Radix Sort": "O(d·n)",
-    "QuickSort (Central)": "O(n log n)",
-    "QuickSort (Aleatório)": "O(n log n)",
-    "HeapSort": "O(n log n)"
-}
-
-complexidade_memoria = {
-    "Counting Sort": "O(n + k)",
-    "Radix Sort": "O(n)",
-    "QuickSort (Central)": "O(log n)",
-    "QuickSort (Aleatório)": "O(log n)",
-    "HeapSort": "O(1)"
-}
-
-tabela = []
-
-for posicao, (nome, tempo) in enumerate(ranking_tempo, start=1):
-    tabela.append({
-        "Ranking (Tempo)": posicao,
-        "Algoritmo": nome,
-        "Tempo Médio (ms)": round(tempo, 4),
-        "Complexidade Tempo": complexidade_tempo[nome],
-        "Complexidade Memória": complexidade_memoria[nome]
-    })
-
-df_ranking = pd.DataFrame(tabela)
-
-st.markdown("""<h5>Tabela Comparativa Automática</h5>""", unsafe_allow_html=True)
-st.dataframe(df_ranking, use_container_width=True)
-
-# ----------------------------------------------------------
-# 3) Gráfico Interativo – Ranking por Tempo Experimental
-# ----------------------------------------------------------
-
-st.markdown("""<h5>Escala do Melhor → Pior (Tempo Experimental)</h5>""", unsafe_allow_html=True)
-
-nomes_ordenados = [x[0] for x in ranking_tempo]
-tempos_ordenados = [x[1] for x in ranking_tempo]
-
-fig1 = go.Figure()
-
-fig1.add_trace(go.Bar(
-    y=nomes_ordenados,
-    x=tempos_ordenados,
-    orientation='h',
-    marker=dict(
-        color="cyan"
-    ),
-    width=0.45,  # barras mais finas
-    hovertemplate=
-        "<b>%{y}</b><br>" +
-        "Tempo Médio: %{x:.4f} ms<extra></extra>"
-))
-
-fig1.update_layout(
-    title="Ranking por Tempo Médio Experimental",
-    xaxis_title="Tempo Médio (ms)",
-    yaxis_title="Algoritmo",
-    template="plotly_white",
-    height=450
-)
-
-fig1.update_yaxes(autorange="reversed")
-
-st.plotly_chart(fig1, use_container_width=True)
-
-# ----------------------------------------------------------
-# 4) Gráfico Interativo – Ranking por Uso de Memória
-# ----------------------------------------------------------
-
-st.markdown("""<h5>Escala do Melhor → Pior (Uso de Memória Teórico)</h5>""", unsafe_allow_html=True)
-
-ranking_memoria = [
-    ("HeapSort", 1),
-    ("QuickSort (Central)", 2),
-    ("QuickSort (Aleatório)", 2),
-    ("Radix Sort", 3),
-    ("Counting Sort", 4)
-]
-
-nomes_memoria = [x[0] for x in ranking_memoria]
-valores_memoria = [x[1] for x in ranking_memoria]
-
-fig2 = go.Figure()
-
-fig2.add_trace(go.Bar(
-    y=nomes_memoria,
-    x=valores_memoria,
-    orientation='h',
-    marker=dict(
-        color="lightgreen"
-    ),
-    width=0.45,  # barras mais finas
-    hovertemplate=
-        "<b>%{y}</b><br>" +
-        "Escala Relativa de Memória: %{x}<extra></extra>"
-))
-
-fig2.update_layout(
-    title="Ranking Teórico por Uso de Memória",
-    xaxis_title="Escala Relativa (Menor é Melhor)",
-    yaxis_title="Algoritmo",
-    template="plotly_white",
-    height=450
-)
-
-fig2.update_yaxes(autorange="reversed")
-
-st.plotly_chart(fig2, use_container_width=True)
